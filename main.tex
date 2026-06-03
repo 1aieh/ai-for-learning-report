@@ -52,7 +52,9 @@ This concern motivated \textit{DeepDive}. The problem was not framed as whether 
 
 This concern aligns with prior work suggesting that AI-generated outputs can feel easier and faster while still producing shallower understanding than more active search practices~\cite{melumad2025llmlearning}. It also aligns with the view that searching is itself a learning process rather than only a retrieval task~\cite{vakkari2016searching}. For literature recommendation systems specifically, explanations and user control matter because users need to understand why items are being recommended, not simply accept that they are relevant~\cite{guesmi2023interactive}. Together, these perspectives suggest that the interface around retrieval may matter as much as retrieval quality itself.
 
-This paper asks a focused question: \textit{can a structured AI-supported interface help users develop a more active and better-articulated understanding of a research area during early-stage literature exploration?} To investigate this, the paper presents \textit{DeepDive}, an interface that asks users to clarify concerns, confirm conceptual research areas, compare papers through contribution-framed cards, and assemble a literature foundation before citation export is made available.
+To investigate that issue, this paper presents \textit{DeepDive}, an interface that asks users to clarify concerns, confirm conceptual research areas, compare papers through contribution-framed cards, and assemble a literature foundation before citation export is made available.
+
+\paragraph{Research Question.} \textit{How does a structured AI-supported literature exploration workflow influence users' confidence in their literature selections and their ability to articulate why selected papers are relevant, compared with a flat-list retrieval interface?}
 
 The contribution is twofold. First, the paper presents a design contribution in the form of a structured interaction model for literature exploration. Second, it reports an exploratory evaluation comparing DeepDive with a constrained flat-list baseline. The evaluation focuses on practically relevant outcomes: perceived understanding, engagement, confidence, and the ability to articulate why selected papers belong in an initial reading list. The findings are presented as directional patterns from a small course-project study rather than as population-level effects.
 
@@ -79,7 +81,21 @@ DeepDive was designed around three goals: helping users clarify a still-forming 
 
 Figure~\ref{fig:workflow} shows the overall workflow. Users begin with a rough topic, respond to topic-mapping prompts, confirm proposed research areas, compare papers within those areas, and finally assemble a literature foundation. The importance of this sequence is not simply that it is longer than a conventional chat interaction. Each step surfaces a different kind of judgment: what matters in the topic, how the field might be structured, which papers serve different roles, and whether the emerging reading list has a shape the user can actually explain.
 
-After topic entry, the system asks exploratory questions intended to make the user's concerns explicit before papers appear. It then proposes conceptual research areas through a confirmation step rather than silently imposing them. This makes the system-authored structure visible and contestable.
+\subsection{Topic Mapping as concern-first entry}
+After topic entry, the system asks exploratory questions intended to make the user's concerns explicit before papers appear. This is one of the most distinctive parts of the interface. Instead of treating the user's initial prompt as complete, DeepDive asks what aspects of the topic feel most important, uncertain, or worrying. The intention is twofold: to help the user clarify their own priorities, and to give the system a more interpretable basis for structuring what comes next.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.88\linewidth]{assets/fig2-topic-mapping}
+  \caption{\figcap{Topic Mapping asks users to articulate concerns before literature is shown, making early assumptions explicit rather than letting the first retrieved list define the field.}}
+  \Description{The Topic Mapping screen of DeepDive.}
+  \label{fig:topicmapping}
+\end{figure}
+
+This step is meant to reinforce active involvement at the very start of the workflow. Rather than asking users to react to whatever list appears first, it encourages them to state a perspective from which the literature should be explored. At the same time, the evaluation later showed that this step can introduce friction for users whose topic already feels clear, making it both a strength and a site of tension in the design.
+
+\subsection{Research Area Discovery as contestable structure}
+After Topic Mapping, the system proposes conceptual research areas through a confirmation step rather than silently imposing them. This makes the system-authored structure visible and contestable.
 
 \begin{figure}[t]
   \centering
@@ -89,6 +105,9 @@ After topic entry, the system asks exploratory questions intended to make the us
   \label{fig:areas}
 \end{figure}
 
+This design choice matters because it preserves user agency at the point where the system begins to shape the conceptual map of the field. The interface does not simply reveal tabs or clusters as if they were unquestionably correct. Instead, it asks for assent. In design terms, this is meant to shift the interface from opaque recommendation toward guided negotiation of structure.
+
+\subsection{Contribution-framed comparison in Literature Exploration}
 Once areas are confirmed, papers appear within those areas. A key design decision is that cards foreground contribution rather than title. This is meant to support comparison at the level of what a paper offers rather than only whether its title looks relevant.
 
 \begin{figure}[t]
@@ -99,6 +118,9 @@ Once areas are confirmed, papers appear within those areas. A key design decisio
   \label{fig:exploration}
 \end{figure}
 
+This view is where the workflow turns from structure-building into selection. By grouping papers inside confirmed areas and giving each one a contribution-oriented framing, the interface tries to encourage intentional selection rather than title recognition or rank-following. Users are meant to compare how papers differ, complement one another, or occupy different roles within the space.
+
+\subsection{Literature Foundation as understanding-before-export}
 The final Literature Foundation screen groups selected papers by area and only then exposes citation export. This reframes the output of the interaction as a structured reading foundation rather than a flat list of saved citations.
 
 \begin{figure}[t]
@@ -109,19 +131,23 @@ The final Literature Foundation screen groups selected papers by area and only t
   \label{fig:foundation}
 \end{figure}
 
+That ordering is deliberate. The system is designed so that export follows topic shaping, area confirmation, and comparison, rather than short-circuiting them. In other words, the final screen operationalizes the broader principle of understanding before extraction.
+
 \section{Method}
 \subsection{Study design}
-The evaluation asked whether a structured exploration workflow would affect participants' confidence in their literature selections and their ability to articulate why those selections mattered, compared to an unstructured AI-retrieval baseline. DeepDive was compared with a constrained flat-list baseline in a within-subjects, counterbalanced design. Each participant completed both conditions, with topic order crossed against condition order.
+The evaluation asked whether a structured exploration workflow would affect participants' confidence in their literature selections and their ability to articulate why those selections mattered, compared to an unstructured AI-retrieval baseline. DeepDive was compared with a constrained flat-list baseline in a within-subjects, counterbalanced design. Each participant completed both conditions, with condition order crossed against topic order so that any order effect was not confounded with a single topic.
 
 The baseline was intentionally constrained in order to compare two interaction models on more balanced terms: immediate retrieval versus structured exploration. In the baseline condition, participants received a flat list of papers with titles and short excerpts, without topic mapping, research-area confirmation, or contribution-framed organization. In the DeepDive condition, participants moved through the staged workflow described above. Because both interfaces were prototypes, the baseline did not fully reproduce the responsiveness participants might associate with a production chatbot. This is both a limitation of the implementation and a consequence of the study's scope-matching design choice.
 
-\subsection{Participants, task, and measures}
-Five master's-level students known to the researcher volunteered to participate. All were enrolled in master's-level courses and had prior exposure to academic literature. Participants completed the same high-level task in both conditions: select three to five papers for an initial reading list on an assigned topic. The same underlying paper pool was used across conditions so that the comparison stayed focused on interaction structure rather than content availability.
+\subsection{Participants, task, and procedure}
+Five master's-level students known to the researcher volunteered to participate. All were enrolled in master's-level courses and had prior exposure to academic literature. Participants completed the same high-level task in both conditions: select three to five papers for an initial reading list on an assigned topic.
 
+Two topics of comparable breadth and difficulty were used: AI's impact on student learning behaviour and AI's impact on academic literature discovery. The same underlying paper pool was reused across conditions, and each participant saw one topic per condition rather than the same topic twice. Per-session duration was approximately 50--60 minutes, including introduction and consent, two task conditions with think-aloud, post-condition Likert ratings, comparative questions at the end, and a short debrief.
+
+\subsection{Measures and analysis}
 After each condition, participants rated confidence, articulation, perceived understanding, and active engagement on a five-point Likert scale. They also completed an open-ended articulation prompt asking them to describe the research area, explain how the selected papers related to it, and justify why those papers had been chosen. Think-aloud observations were captured through session notes and supported by recordings and transcription.
 
-\subsection{Analysis}
-Quantitative analysis remained descriptive: per-item means and condition differences were summarized without statistical inference. Qualitative material was coded thematically over multiple passes using dimensions defined in the evaluation protocol: structural understanding, comparison-based reasoning, and intentionality cues. The purpose of the qualitative analysis was not to build an exhaustive coding system, but to test whether the kind of articulation encouraged by DeepDive differed meaningfully from the articulation produced under the baseline.
+Quantitative analysis remained descriptive: per-item means and condition differences were summarized without statistical inference. Qualitative material was coded thematically over multiple passes by the researcher using three dimensions defined in the evaluation protocol: structural understanding, comparison-based reasoning, and intentionality cues. The purpose of the qualitative analysis was not to build an exhaustive coding system, but to test whether the kind of articulation encouraged by DeepDive differed meaningfully from the articulation produced under the baseline.
 
 \section{Results}
 \subsection{Quantitative pattern}
@@ -143,14 +169,14 @@ Across this sample, DeepDive produced higher mean ratings on all four measured i
   \end{tabular}
 \end{table}
 
-The largest shift appears on active engagement (+2.4), followed by perceived understanding (+2.2) and articulation (+2.0). Confidence also increased, but by a smaller margin (+1.0). This matters because it suggests that the main value of the interface was not simply producing a stronger feeling of certainty. Rather, it supported richer understanding and stronger justification.
+The largest shift appears on active engagement (+2.4), followed by perceived understanding (+2.2) and articulation (+2.0). Confidence also increased, but by a smaller margin (+1.0). Given the small sample size, these results should be interpreted as exploratory indications rather than evidence of generalizable effects. They are best read as a consistent directional pattern within this sample, not as proof of a stable population-level advantage.
 
-All five participants reported that DeepDive helped them understand the topic better, and all five said they would trust it more as a starting point for a real assignment, although those trust judgments came with caveats.
+All five participants reported that DeepDive helped them understand the topic better, and all five said they would trust it more as a starting point for a real assignment, although those trust judgments came with caveats. This makes the pattern hard to ignore within the study, but the same unanimity is also one reason the results must be framed cautiously.
 
 \subsection{Qualitative pattern}
 The clearest qualitative shift appeared in participants' open-ended explanations. Under the baseline, several responses stopped at relevance: papers matched the topic, seemed appropriate, or looked like reasonable starting points. Under DeepDive, participants more often described sub-areas, tensions between papers, and the specific role individual papers played in the broader topic. The explanations therefore became more structural and comparative.
 
-The findings notes coded articulation along three dimensions: structural understanding, comparison-based reasoning, and intentionality cues. Under the baseline, three of five participants were rated absent on both structural understanding and comparison-based reasoning. Under DeepDive, all five participants reached the strongest rating on all three dimensions. The articulation difference is therefore one of the clearest qualitative signals in the study.
+The findings notes coded articulation along three dimensions: structural understanding, comparison-based reasoning, and intentionality cues. Under the baseline, three of five participants were rated absent on both structural understanding and comparison-based reasoning. Under DeepDive, all five participants reached the strongest rating on all three dimensions. This does not establish a general effect, but it does make the articulation shift one of the clearest qualitative signals in the present study.
 
 Two interface elements carried most of the qualitative weight. First, contribution-framed cards helped participants compare papers on the basis of what each paper offered rather than what it was called. Second, the area-discovery step gave participants a vocabulary for discussing the shape of the research space. In the findings notes, one participant described the area modal as the moment ``where it clicked,'' while another emphasized that the structure helped turn papers into positions in a conversation rather than a pile of related items.
 
